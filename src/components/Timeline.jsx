@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import PhotoCard from "./PhotoCard.jsx";
+import PhotoLightbox from "./PhotoLightbox.jsx";
 import { IconPhoto, IconClock } from "../icons.jsx";
 import { fetchPhotos, updatePhotoTitle, deletePhoto } from "../lib/gallery.js";
 import { formatMonthHeading } from "../lib/format.js";
@@ -8,6 +9,7 @@ export default function Timeline({ accessCode, refreshTick }) {
   const [status, setStatus] = useState("loading"); // loading | error | ready
   const [photos, setPhotos] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   const load = useCallback(async () => {
     if (!accessCode) return;
@@ -105,29 +107,33 @@ export default function Timeline({ accessCode, refreshTick }) {
   }
 
   return (
-    <div className="flex-1 py-5 flex flex-col gap-8 pb-28">
-      {groups.map((group) => (
-        <section key={group.label} className="flex flex-col gap-3">
-          <div
-            className="flex items-center gap-2 text-sm font-bold text-muted sticky bg-bg py-1.5 -mx-1 px-1 z-[5]"
-            style={{ top: "calc(57px + env(safe-area-inset-top, 0px))" }}
-          >
-            <IconClock className="w-4 h-4 flex-shrink-0" />
-            <h2 className="capitalize">{group.label}</h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {group.items.map((photo) => (
-              <PhotoCard
-                key={photo.id}
-                photo={photo}
-                accessCode={accessCode}
-                onUpdateTitle={handleUpdateTitle}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+    <>
+      <div className="py-5 flex flex-col gap-8 pb-28">
+        {groups.map((group) => (
+          <section key={group.label} className="flex flex-col gap-3">
+            {/* top-0 cukup di sini -- area ini (.app-scroll di App.jsx) yang
+                jadi konteks scroll-nya sendiri, Topbar sudah di luar area ini
+                jadi tidak perlu lagi dikompensasi tinggi topbar-nya. */}
+            <div className="flex items-center gap-2 text-sm font-bold text-muted sticky top-0 bg-bg py-1.5 -mx-1 px-1 z-[5]">
+              <IconClock className="w-4 h-4 flex-shrink-0" />
+              <h2 className="capitalize">{group.label}</h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {group.items.map((photo) => (
+                <PhotoCard
+                  key={photo.id}
+                  photo={photo}
+                  accessCode={accessCode}
+                  onUpdateTitle={handleUpdateTitle}
+                  onDelete={handleDelete}
+                  onOpenLightbox={setLightboxPhoto}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+      <PhotoLightbox photo={lightboxPhoto} onClose={() => setLightboxPhoto(null)} />
+    </>
   );
 }

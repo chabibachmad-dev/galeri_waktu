@@ -55,8 +55,25 @@ export default function UploadFab({ accessCode, onUploaded }) {
     onUploaded();
   }
 
+  const pct = progress && progress.total > 0 ? Math.round((progress.done / progress.total) * 100) : 0;
+
   return (
     <div className="fixed bottom-5 inset-x-0 flex flex-col items-center gap-2 pointer-events-none px-4">
+      {busy && progress ? (
+        <div className="pointer-events-auto w-full max-w-xs bg-bg-card border border-line rounded-xl p-3 text-xs text-ink">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="font-bold">Mengunggah foto...</span>
+            <span className="text-muted font-mono">{progress.done}/{progress.total}</span>
+          </div>
+          <div className="w-full h-1.5 rounded-full bg-soft border border-line overflow-hidden">
+            <div
+              className="h-full bg-ink"
+              style={{ width: `${pct}%`, transition: "width 0.25s ease" }}
+            />
+          </div>
+        </div>
+      ) : null}
+
       {errors.length > 0 ? (
         <div className="pointer-events-auto w-full max-w-xs bg-bg-card border border-line rounded-xl p-3 text-xs text-ink">
           <p className="font-bold mb-1">Sebagian foto gagal diunggah:</p>

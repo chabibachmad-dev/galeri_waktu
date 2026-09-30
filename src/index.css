@@ -35,6 +35,12 @@ html,
 body,
 #root {
   height: 100%;
+  /* Halaman sendiri sengaja TIDAK ikut scroll -- yang scroll cuma area
+     konten (lihat .app-scroll di App.jsx). Ini pola standar buat PWA
+     "standalone" di iOS supaya elemen position:fixed/sticky (header, tombol
+     +) tidak ikut geser/salah posisi waktu discroll (bug lama WebKit kalau
+     seluruh body-nya yang scroll). */
+  overflow: hidden;
 }
 
 body {

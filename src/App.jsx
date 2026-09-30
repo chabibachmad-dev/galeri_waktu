@@ -67,10 +67,14 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-ink flex flex-col">
-      <div className="mx-auto w-full max-w-3xl px-4 flex-1 flex flex-col">
+    <div className="h-screen bg-bg text-ink flex flex-col overflow-hidden">
+      <div className="mx-auto w-full max-w-3xl px-4 flex flex-col h-full overflow-hidden">
         <Topbar theme={theme} onToggleTheme={toggleTheme} onLogout={handleLogout} />
-        <Timeline accessCode={accessCode} refreshTick={refreshTick} />
+        {/* Ini satu-satunya area yang scroll -- Topbar & UploadFab di luar
+            area ini sengaja tidak ikut ke-scroll (lihat catatan di index.css). */}
+        <div className="app-scroll flex-1 overflow-y-auto flex flex-col" style={{ WebkitOverflowScrolling: "touch" }}>
+          <Timeline accessCode={accessCode} refreshTick={refreshTick} />
+        </div>
       </div>
       <UploadFab accessCode={accessCode} onUploaded={handlePhotoAdded} />
     </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IconEdit, IconCheck, IconX, IconTrash } from "../icons.jsx";
 import { formatDateShort } from "../lib/format.js";
 
-export default function PhotoCard({ photo, accessCode, onUpdateTitle, onDelete }) {
+export default function PhotoCard({ photo, accessCode, onUpdateTitle, onDelete, onOpenLightbox }) {
   const [editing, setEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(photo.title);
   const [saving, setSaving] = useState(false);
@@ -41,14 +41,20 @@ export default function PhotoCard({ photo, accessCode, onUpdateTitle, onDelete }
 
   return (
     <figure className="border border-line rounded-2xl overflow-hidden bg-bg-card flex flex-col">
-      <div className="aspect-square bg-bg overflow-hidden">
+      <button
+        type="button"
+        onClick={() => onOpenLightbox?.(photo)}
+        className="aspect-square bg-bg overflow-hidden block w-full p-0 border-0 cursor-pointer"
+        title="Lihat foto penuh"
+        aria-label="Lihat foto penuh"
+      >
         <img
           src={photo.drive_url}
           alt={photo.title}
           loading="lazy"
           className="w-full h-full object-cover"
         />
-      </div>
+      </button>
       <figcaption className="p-3 flex flex-col gap-1.5">
         {editing ? (
           <div className="flex items-center gap-1.5">
@@ -58,7 +64,7 @@ export default function PhotoCard({ photo, accessCode, onUpdateTitle, onDelete }
               onChange={(e) => setDraftTitle(e.target.value)}
               autoFocus
               maxLength={200}
-              className="flex-1 min-w-0 px-2 py-1.5 rounded-md border border-line bg-bg text-ink text-sm font-mono"
+              className="flex-1 min-w-0 px-2 py-1.5 rounded-md border border-line bg-bg text-ink text-base font-mono"
             />
             <button
               type="button"
