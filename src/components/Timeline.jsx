@@ -108,7 +108,10 @@ export default function Timeline({ accessCode, refreshTick }) {
     <div className="flex-1 py-5 flex flex-col gap-8 pb-28">
       {groups.map((group) => (
         <section key={group.label} className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-muted sticky top-[57px] bg-bg py-1.5 -mx-1 px-1 z-[5]">
+          <div
+            className="flex items-center gap-2 text-sm font-bold text-muted sticky bg-bg py-1.5 -mx-1 px-1 z-[5]"
+            style={{ top: "calc(57px + env(safe-area-inset-top, 0px))" }}
+          >
             <IconClock className="w-4 h-4 flex-shrink-0" />
             <h2 className="capitalize">{group.label}</h2>
           </div>

@@ -24,7 +24,10 @@ export default function AccessGate({ theme, onToggleTheme, onUnlocked }) {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-ink flex flex-col">
+    <div
+      className="min-h-screen bg-bg text-ink flex flex-col"
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+    >
       <button
         type="button"
         onClick={onToggleTheme}
